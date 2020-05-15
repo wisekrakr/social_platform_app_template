@@ -1,0 +1,2 @@
+rootProject.name='teachwise'
+include ':app'
