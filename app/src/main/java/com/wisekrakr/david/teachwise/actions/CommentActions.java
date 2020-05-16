@@ -1,7 +1,6 @@
 package com.wisekrakr.david.teachwise.actions;
 
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -10,21 +9,28 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.wisekrakr.david.teachwise.R;
-import com.wisekrakr.david.teachwise.models.UserModel;
-import com.wisekrakr.david.teachwise.utils.UserImage;
+import com.wisekrakr.david.teachwise.adapters.CommentAdapter;
+import com.wisekrakr.david.teachwise.models.CommentModel;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 
 public class CommentActions implements CommentActionsContext {
 
     private FirebaseUser user;
+    private List<CommentModel> commentList;
+    private CommentAdapter commentAdapter;
 
-    public CommentActions() {
+    public CommentActions(List<CommentModel> commentList, CommentAdapter commentAdapter) {
+        this.commentList = commentList;
+        this.commentAdapter = commentAdapter;
+
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
+
 
     @Override
     public void addComment(EditText comment, String postId) {
@@ -33,21 +39,27 @@ public class CommentActions implements CommentActionsContext {
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("comment", comment.getText().toString());
         hashMap.put("publisher", user.getUid());
+        hashMap.put("createdAt", new Date().getTime());
 
         reference.push().setValue(hashMap);
         comment.setText("");
     }
 
-    @Override
-    public void getAvatar(final ImageView image) {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(user.getUid());
 
+
+    @Override
+    public void getComments(String postId) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Comments").child(postId);
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserModel userModel = dataSnapshot.getValue(UserModel.class);
+                commentList.clear();
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    CommentModel commentModel = snapshot.getValue(CommentModel.class);
+                    commentList.add(commentModel);
+                }
 
-                UserImage.setPicassoImage(userModel.getAvatar(), image, R.drawable.ic_person_black);
+                commentAdapter.notifyDataSetChanged();
             }
 
             @Override

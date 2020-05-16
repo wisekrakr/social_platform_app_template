@@ -10,11 +10,23 @@ import android.widget.Toast;
 
 import com.wisekrakr.david.teachwise.R;
 import com.wisekrakr.david.teachwise.actions.CommentActions;
+import com.wisekrakr.david.teachwise.actions.UserActionsStatic;
+import com.wisekrakr.david.teachwise.adapters.CommentAdapter;
+import com.wisekrakr.david.teachwise.models.CommentModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CommentActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerView;
+    private CommentAdapter commentAdapter;
+    private List<CommentModel>commentList;
 
     private EditText addCommentText;
     private ImageView avatarImage;
@@ -30,6 +42,12 @@ public class CommentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
 
+        //init views
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Comments");
@@ -41,8 +59,16 @@ public class CommentActivity extends AppCompatActivity {
             }
         });
 
+        //init commentList
+        commentList = new ArrayList<>();
+
+        //init comment adapter
+        commentAdapter = new CommentAdapter(this, commentList);
+
+        recyclerView.setAdapter(commentAdapter);
+
         //init comment actions
-        commentActions = new CommentActions();
+        commentActions = new CommentActions(commentList, commentAdapter);
 
         addCommentText = findViewById(R.id.add_comment);
         avatarImage = findViewById(R.id.user_avatar);
@@ -54,10 +80,12 @@ public class CommentActivity extends AppCompatActivity {
 
         postCommentHandler();
 
+        commentActions.getComments(postId);
+
     }
 
     private void postCommentHandler(){
-        commentActions.getAvatar(avatarImage);
+        UserActionsStatic.getAvatar(avatarImage, publisherId);
         postCommentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

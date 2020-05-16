@@ -23,9 +23,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.wisekrakr.david.teachwise.R;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
@@ -43,7 +45,7 @@ public class PostActivity extends AppCompatActivity {
     //views
     private ImageView close, fileAdded;
     private TextView post;
-    private EditText description, fieldOfStudy, studyContext;
+    private EditText title, fieldOfStudy, studyContext;
 
 
 
@@ -57,7 +59,7 @@ public class PostActivity extends AppCompatActivity {
         close = findViewById(R.id.close);
         fileAdded = findViewById(R.id.file_added);
         post = findViewById(R.id.post);
-        description = findViewById(R.id.description);
+        title = findViewById(R.id.title);
         fieldOfStudy = findViewById(R.id.field_of_study);
         studyContext = findViewById(R.id.study_context);
 
@@ -148,10 +150,10 @@ public class PostActivity extends AppCompatActivity {
             final StorageReference fileReference = storageReference
                     .child(System.currentTimeMillis() + "." + getFileExtension(fileUri));
 
-            uploadTask = fileReference.putFile(fileUri);
-            uploadTask.continueWithTask(new Continuation() {
+            StorageTask uploadTask = fileReference.putFile(fileUri);
+            uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
-                public Object then(@NonNull Task task) throws Exception {
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                     if(!task.isSuccessful()){
                         throw task.getException();
                     }
@@ -161,9 +163,10 @@ public class PostActivity extends AppCompatActivity {
             }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                 @Override
                 public void onComplete(@NonNull Task<Uri> task) {
+
                     if(task.isSuccessful()){
                         Uri downloadUri = task.getResult();
-                        myUrl = downloadUri.toString();
+                        myUrl = downloadUri != null ? downloadUri.toString() : null;
 
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts");
 
@@ -172,10 +175,12 @@ public class PostActivity extends AppCompatActivity {
                         HashMap<String, Object> hashMap = new HashMap<>();
                         hashMap.put("postId", postId);
                         hashMap.put("postImage", myUrl);
-                        hashMap.put("description", description.getText().toString());
+                        hashMap.put("title", title.getText().toString());
                         hashMap.put("fieldOfStudy", fieldOfStudy.getText().toString());
                         hashMap.put("studyContext", studyContext.getText().toString());
-                        hashMap.put("publisher", FirebaseAuth.getInstance().getCurrentUser());
+                        hashMap.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        hashMap.put("createdAt", new Date().getTime());
+
 
                         reference.child(postId).setValue(hashMap);
 

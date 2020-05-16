@@ -55,6 +55,11 @@ public class PostActions implements PostActionsContext {
     }
 
     @Override
+    public void createPost() {
+
+    }
+
+    @Override
     public void checkFollowing() {
 
         final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Follow")

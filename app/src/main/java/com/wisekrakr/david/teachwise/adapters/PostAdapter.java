@@ -16,9 +16,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wisekrakr.david.teachwise.R;
+import com.wisekrakr.david.teachwise.actions.UserActionsStatic;
 import com.wisekrakr.david.teachwise.activities.CommentActivity;
 import com.wisekrakr.david.teachwise.models.PostModel;
-import com.wisekrakr.david.teachwise.models.UserModel;
+import com.wisekrakr.david.teachwise.utils.CreatedAtFormatter;
 import com.wisekrakr.david.teachwise.utils.UserImage;
 
 import java.util.List;
@@ -37,7 +38,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         this.context = context;
         this.postList = postList;
 
-        user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @NonNull
@@ -51,6 +51,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         final PostModel postModel = postList.get(position);
 
@@ -59,25 +60,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
 
 
         //set data
-        if(postModel.getDescription().equals("")){
-            holder.description.setVisibility(View.GONE);
+        if(postModel.getTitle().equals("")){
+            holder.title.setVisibility(View.GONE);
         }else if(postModel.getFieldOfStudy().equals("")){
             holder.fieldOfStudy.setVisibility(View.GONE);
         }else if(postModel.getStudyContext().equals("")){
             holder.studyContext.setVisibility(View.GONE);
         }else {
-            holder.description.setVisibility(View.VISIBLE);
-            holder.description.setText(postModel.getDescription());
+            holder.title.setVisibility(View.VISIBLE);
+            holder.title.setText(postModel.getTitle());
 
             holder.fieldOfStudy.setVisibility(View.VISIBLE);
             holder.fieldOfStudy.setText(postModel.getFieldOfStudy());
 
             holder.studyContext.setVisibility(View.VISIBLE);
             holder.studyContext.setText(postModel.getStudyContext());
+
+
+            String date = CreatedAtFormatter.getTimeDate(postModel.getCreatedAt());
+            holder.createdAt.setVisibility(View.VISIBLE);
+            holder.createdAt.setText(date);
         }
 
         //show publisher data
-        publisherData(holder.avatarImage, holder.username, holder.publisher, postModel.getPublisher());
+        UserActionsStatic.getUserData(holder.avatarImage, holder.username, user.getUid());
         //show likes
         isLiked(postModel.getPostId(), holder.like);
         //show number likes
@@ -100,7 +106,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     static class MyViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView avatarImage, postImage, like, comment, save;
-        private TextView username, publisher, likes, description, fieldOfStudy, studyContext, comments;
+        private TextView username,  likes, title, fieldOfStudy, studyContext, comments, createdAt;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -112,12 +118,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
             comment = itemView.findViewById(R.id.comment);
             save = itemView.findViewById(R.id.save);
             username = itemView.findViewById(R.id.username);
-            publisher = itemView.findViewById(R.id.publisher);
             likes = itemView.findViewById(R.id.likes);
-            description = itemView.findViewById(R.id.description);
+            title = itemView.findViewById(R.id.title);
             fieldOfStudy = itemView.findViewById(R.id.field_of_study);
             studyContext = itemView.findViewById(R.id.study_context);
             comments = itemView.findViewById(R.id.comments);
+            createdAt = itemView.findViewById(R.id.created_at);
 
         }
     }
@@ -207,24 +213,5 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
 
 
 
-    private void publisherData(final ImageView avatarImage, final TextView username, final TextView publisher, String userId){
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
-            reference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    UserModel userModel = dataSnapshot.getValue(UserModel.class);
-
-                    UserImage.setPicassoImageWithPlaceHolder(userModel.getAvatar(), avatarImage, R.drawable.ic_person_black);
-                    username.setText(userModel.getUsername());
-                    publisher.setText(userModel.getUsername());
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-    }
 }

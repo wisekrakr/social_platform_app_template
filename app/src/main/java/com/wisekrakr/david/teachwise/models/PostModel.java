@@ -2,18 +2,20 @@ package com.wisekrakr.david.teachwise.models;
 
 public class PostModel {
 
-    private String postId, publisher, description, postImage, fieldOfStudy, studyContext;
+    private String postId, publisher, title, postImage, fieldOfStudy, studyContext;
+    private Long createdAt;
 
     public PostModel() {
     }
 
-    public PostModel(String postId, String publisher, String description, String postImage, String fieldOfStudy, String studyContext) {
+    public PostModel(String postId, String publisher, String title, String postImage, String fieldOfStudy, String studyContext, Long createdAt) {
         this.postId = postId;
         this.publisher = publisher;
-        this.description = description;
+        this.title = title;
         this.postImage = postImage;
         this.fieldOfStudy = fieldOfStudy;
         this.studyContext = studyContext;
+        this.createdAt = createdAt;
     }
 
     public String getPostId() {
@@ -32,12 +34,12 @@ public class PostModel {
         this.publisher = publisher;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTitle() {
+        return title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getPostImage() {
@@ -62,5 +64,13 @@ public class PostModel {
 
     public void setStudyContext(String studyContext) {
         this.studyContext = studyContext;
+    }
+
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
     }
 }

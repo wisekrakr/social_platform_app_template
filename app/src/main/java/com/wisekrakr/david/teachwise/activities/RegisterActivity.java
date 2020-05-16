@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.wisekrakr.david.teachwise.R;
 import com.wisekrakr.david.teachwise.actions.AuthActions;
 
+import java.util.Date;
 import java.util.HashMap;
 
 import androidx.annotation.NonNull;
@@ -124,6 +125,7 @@ public class RegisterActivity extends AppCompatActivity {
                             hashMap.put("bio", "");
                             hashMap.put("location", "");
                             hashMap.put("avatar", "https://firebasestorage.googleapis.com/v0/b/teachwise.appspot.com/o/profile-placeholder.png?alt=media&token=4213869f-a732-4929-ab21-91a4cc754e21");
+                            hashMap.put("createdAt", new Date().getTime());
 
                             authActions.createUser(reference, hashMap, RegisterActivity.this);
 

@@ -2,13 +2,21 @@ package com.wisekrakr.david.teachwise.models;
 
 public class UserModel {
 
-    private String username, email, fullName, bio, location, avatar, id;
+    private String username;
+    private String email;
+    private String fullName;
+    private String bio;
+    private String location;
+    private String avatar;
+    private String id;
+    private Long createdAt;
+
 
     public UserModel() {
         // Default constructor required for calls to DataSnapshot.getValue(UserModel.class)
     }
 
-    public UserModel(String username, String email, String fullName, String bio, String location, String avatar, String id) {
+    public UserModel(String username, String email, String fullName, String bio, String location, String avatar, String id,Long createdAt) {
         this.username = username;
         this.email = email;
         this.fullName = fullName;
@@ -16,6 +24,7 @@ public class UserModel {
         this.location = location;
         this.avatar = avatar;
         this.id = id;
+        this.createdAt = createdAt;
     }
 
     public String getUsername() {
@@ -72,5 +81,13 @@ public class UserModel {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Long createdAt) {
+        this.createdAt = createdAt;
     }
 }
