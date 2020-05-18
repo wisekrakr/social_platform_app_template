@@ -95,7 +95,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
             public void onClick(View v) {
 
                 SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                editor.putString("profile_id", userModel.getId());
+                editor.putString("profileId", userModel.getId());
                 editor.apply();
 
                 ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
