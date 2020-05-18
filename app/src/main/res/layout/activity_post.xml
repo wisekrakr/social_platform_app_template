@@ -70,16 +70,16 @@
             android:maxLines="1"/>
 
         <EditText
-            android:id="@+id/field_of_study"
+            android:id="@+id/tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:hint="Field of study"
+            android:hint="Tags (seperate by comma)"
             android:maxLines="1"/>
 
 
         <EditText
-            android:id="@+id/study_context"
+            android:id="@+id/description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -90,7 +90,7 @@
             android:scrollHorizontally="false"
             android:gravity="top|start"
 
-            android:hint="Study Context"
+            android:hint="Description"
             />
 
 

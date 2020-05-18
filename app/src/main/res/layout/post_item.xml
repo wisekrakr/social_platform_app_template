@@ -94,9 +94,10 @@
             android:layout_marginStart="14dp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimaryDark"/>
+<!--TODO: how to show tags?-->
 
         <TextView
-            android:id="@+id/field_of_study"
+            android:id="@+id/tags"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -104,7 +105,7 @@
             android:textColor="@color/colorPrimaryDark"/>
 
         <TextView
-            android:id="@+id/study_context"
+            android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
