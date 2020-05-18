@@ -2,19 +2,19 @@ package com.wisekrakr.david.teachwise.models;
 
 public class PostModel {
 
-    private String postId, publisher, title, postImage, fieldOfStudy, studyContext;
+    private String postId, publisher, title, postImage, tags, description;
     private Long createdAt;
 
     public PostModel() {
     }
 
-    public PostModel(String postId, String publisher, String title, String postImage, String fieldOfStudy, String studyContext, Long createdAt) {
+    public PostModel(String postId, String publisher, String title, String postImage, String tags, String description, Long createdAt) {
         this.postId = postId;
         this.publisher = publisher;
         this.title = title;
         this.postImage = postImage;
-        this.fieldOfStudy = fieldOfStudy;
-        this.studyContext = studyContext;
+        this.tags = tags;
+        this.description = description;
         this.createdAt = createdAt;
     }
 
@@ -50,20 +50,20 @@ public class PostModel {
         this.postImage = postImage;
     }
 
-    public String getFieldOfStudy() {
-        return fieldOfStudy;
+    public String getTags() {
+        return tags;
     }
 
-    public void setFieldOfStudy(String fieldOfStudy) {
-        this.fieldOfStudy = fieldOfStudy;
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
-    public String getStudyContext() {
-        return studyContext;
+    public String getDescription() {
+        return description;
     }
 
-    public void setStudyContext(String studyContext) {
-        this.studyContext = studyContext;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Long getCreatedAt() {

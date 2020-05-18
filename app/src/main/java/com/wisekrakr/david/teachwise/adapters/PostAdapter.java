@@ -62,20 +62,20 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         //set data
         if(postModel.getTitle().equals("")){
             holder.title.setVisibility(View.GONE);
-        }else if(postModel.getFieldOfStudy().equals("")){
-            holder.fieldOfStudy.setVisibility(View.GONE);
-        }else if(postModel.getStudyContext().equals("")){
-            holder.studyContext.setVisibility(View.GONE);
+        }else if(postModel.getTags().equals("")){
+            holder.tags.setVisibility(View.GONE);
+        }else if(postModel.getDescription().equals("")){
+            holder.description.setVisibility(View.GONE);
         }else {
+
             holder.title.setVisibility(View.VISIBLE);
             holder.title.setText(postModel.getTitle());
 
-            holder.fieldOfStudy.setVisibility(View.VISIBLE);
-            holder.fieldOfStudy.setText(postModel.getFieldOfStudy());
+            holder.tags.setVisibility(View.VISIBLE);
+            holder.tags.setText(postModel.getTags());
 
-            holder.studyContext.setVisibility(View.VISIBLE);
-            holder.studyContext.setText(postModel.getStudyContext());
-
+            holder.description.setVisibility(View.VISIBLE);
+            holder.description.setText(postModel.getDescription());
 
             String date = CreatedAtFormatter.getTimeDate(postModel.getCreatedAt());
             holder.createdAt.setVisibility(View.VISIBLE);
@@ -83,7 +83,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         }
 
         //show publisher data
-        UserActionsStatic.getUserData(holder.avatarImage, holder.username, user.getUid());
+        UserActionsStatic.getPublisherData(holder.avatarImage, holder.username, holder.publisher, postModel.getPublisher());
         //show likes
         isLiked(postModel.getPostId(), holder.like);
         //show number likes
@@ -106,7 +106,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
     static class MyViewHolder extends RecyclerView.ViewHolder{
 
         private ImageView avatarImage, postImage, like, comment, save;
-        private TextView username,  likes, title, fieldOfStudy, studyContext, comments, createdAt;
+        private TextView username,  likes, title, tags, description, comments, publisher, createdAt;
 
         MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -119,9 +119,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
             save = itemView.findViewById(R.id.save);
             username = itemView.findViewById(R.id.username);
             likes = itemView.findViewById(R.id.likes);
+            publisher = itemView.findViewById(R.id.publisher);
             title = itemView.findViewById(R.id.title);
-            fieldOfStudy = itemView.findViewById(R.id.field_of_study);
-            studyContext = itemView.findViewById(R.id.study_context);
+            tags = itemView.findViewById(R.id.tags);
+            description = itemView.findViewById(R.id.description);
             comments = itemView.findViewById(R.id.comments);
             createdAt = itemView.findViewById(R.id.created_at);
 

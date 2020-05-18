@@ -73,7 +73,7 @@ public class DashboardActivity extends AppCompatActivity {
                     case R.id.nav_profile:
                         //profile fragment transaction
                         SharedPreferences.Editor editor = getSharedPreferences("PREFS", MODE_PRIVATE).edit();
-                        editor.putString("profile_id", user.getUid());
+                        editor.putString("profileId", user.getUid());
                         editor.apply();
                         selectedFragment = new ProfileFragment();
                         break;

@@ -45,7 +45,7 @@ public class PostActivity extends AppCompatActivity {
     //views
     private ImageView close, fileAdded;
     private TextView post;
-    private EditText title, fieldOfStudy, studyContext;
+    private EditText title, tags, description;
 
 
 
@@ -60,8 +60,8 @@ public class PostActivity extends AppCompatActivity {
         fileAdded = findViewById(R.id.file_added);
         post = findViewById(R.id.post);
         title = findViewById(R.id.title);
-        fieldOfStudy = findViewById(R.id.field_of_study);
-        studyContext = findViewById(R.id.study_context);
+        tags = findViewById(R.id.tags);
+        description = findViewById(R.id.description);
 
         //init storage
         storageReference = FirebaseStorage.getInstance().getReference("posts");
@@ -176,8 +176,8 @@ public class PostActivity extends AppCompatActivity {
                         hashMap.put("postId", postId);
                         hashMap.put("postImage", myUrl);
                         hashMap.put("title", title.getText().toString());
-                        hashMap.put("fieldOfStudy", fieldOfStudy.getText().toString());
-                        hashMap.put("studyContext", studyContext.getText().toString());
+                        hashMap.put("tags", tags.getText().toString());
+                        hashMap.put("description", description.getText().toString());
                         hashMap.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
                         hashMap.put("createdAt", new Date().getTime());
 
@@ -208,7 +208,7 @@ public class PostActivity extends AppCompatActivity {
 
 
     private void handleStudyContextInput(){
-        studyContext.setOnTouchListener(new View.OnTouchListener() {
+        description.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 v.getParent().requestDisallowInterceptTouchEvent(true);

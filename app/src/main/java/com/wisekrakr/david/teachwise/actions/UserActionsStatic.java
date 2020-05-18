@@ -38,6 +38,48 @@ public class UserActionsStatic {
         });
     }
 
+    public static void getPublisherData(final ImageView avatarImage, final TextView username,final TextView publisher, String userId){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserModel userModel = dataSnapshot.getValue(UserModel.class);
+
+                UserImage.setPicassoImageWithPlaceHolder(userModel.getAvatar(), avatarImage, R.drawable.ic_person_black);
+                username.setText(userModel.getUsername());
+                publisher.setText(userModel.getUsername());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public static void getProfileData(final ImageView avatarImage, final TextView username,final TextView fullName,final TextView bio, String profileId){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(profileId);
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                UserModel userModel = dataSnapshot.getValue(UserModel.class);
+
+                UserImage.setPicassoImageWithPlaceHolder(userModel.getAvatar(), avatarImage, R.drawable.ic_person_black);
+                username.setText(userModel.getUsername());
+                fullName.setText(userModel.getFullName());
+                bio.setText(userModel.getBio());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     public static void getAvatar(final ImageView image,String userId) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
