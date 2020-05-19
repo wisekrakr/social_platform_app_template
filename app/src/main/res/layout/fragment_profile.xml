@@ -196,7 +196,7 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/my_photos"
+                    android:id="@+id/my_images"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -204,7 +204,7 @@
                     style="?android:attr/buttonBarButtonStyle"/>
 
                 <ImageButton
-                    android:id="@+id/saved_photos"
+                    android:id="@+id/saved_images"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -213,20 +213,20 @@
 
             </LinearLayout>
 
-<!--    RecyclerView: List of my images-->
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/recycler_view"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                />-->
+    RecyclerView: List of my images
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
 
-<!--    RecyclerView: List of saved images-->
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:id="@+id/recycler_view_saved"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:visibility="gone"-->
-<!--                />-->
+    RecyclerView: List of saved images
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_saved"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                />
 
         </LinearLayout>
     </ScrollView>

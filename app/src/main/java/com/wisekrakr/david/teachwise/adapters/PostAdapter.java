@@ -56,7 +56,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         final PostModel postModel = postList.get(position);
 
         //if image was uploaded
-        UserImage.setPicassoImageWithPlaceHolder(postModel.getPostImage(), holder.postImage, R.drawable.ic_person_black);
+        UserImage.setPicassoImageWithPlaceHolder(postModel.getPostImage(), holder.postImage, R.drawable.ic_image);
 
 
         //set data

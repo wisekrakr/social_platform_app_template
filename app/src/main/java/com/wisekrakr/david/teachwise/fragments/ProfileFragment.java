@@ -19,16 +19,29 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wisekrakr.david.teachwise.R;
+import com.wisekrakr.david.teachwise.actions.ImageActions;
 import com.wisekrakr.david.teachwise.actions.UserActionsStatic;
+import com.wisekrakr.david.teachwise.adapters.ImageAdapter;
 import com.wisekrakr.david.teachwise.models.PostModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ProfileFragment extends Fragment {
+
+    private ImageAdapter imageAdapter;
+    private RecyclerView recyclerView;
+    private List<PostModel>imageList;
+    private ImageActions imageActions;
 
     private ImageView userAvatar, options;
     private TextView posts, followers, following, fullName, bio, username;
@@ -37,7 +50,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser user;
     private String profileId;
 
-    private ImageButton myPhotos, savedPhotos;
+    private ImageButton myImages, savedImages;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -63,19 +76,33 @@ public class ProfileFragment extends Fragment {
         bio = view.findViewById(R.id.bio);
         username = view.findViewById(R.id.username);
         editProfile = view.findViewById(R.id.edit_profile);
-        myPhotos = view.findViewById(R.id.my_photos);
-        savedPhotos = view.findViewById(R.id.saved_photos);
+        myImages = view.findViewById(R.id.my_images);
+        savedImages = view.findViewById(R.id.saved_images);
+
+        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
+        recyclerView.setLayoutManager(layoutManager);
+
+        imageList = new ArrayList<>();
+
+        imageAdapter = new ImageAdapter(getContext(), imageList);
+
+        recyclerView.setAdapter(imageAdapter);
+
+        imageActions = new ImageActions(imageAdapter, imageList);
 
         UserActionsStatic.getProfileData(userAvatar, username, fullName, bio, profileId);
         editProfile();
         getFollowsOrFollowing();
         getNumOfPosts();
+        imageActions.getUserImages();
 
         if(profileId.equals(user.getUid())){
             editProfile.setText(R.string.edit_profile);
         }else{
             buttonSaysFollowOrFollowing();
-            savedPhotos.setVisibility(View.GONE);
+            savedImages.setVisibility(View.GONE);
         }
 
         return view;
