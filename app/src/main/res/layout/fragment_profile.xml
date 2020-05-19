@@ -196,7 +196,7 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/my_images"
+                    android:id="@+id/user_images"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -204,7 +204,7 @@
                     style="?android:attr/buttonBarButtonStyle"/>
 
                 <ImageButton
-                    android:id="@+id/saved_images"
+                    android:id="@+id/bookmarked_images"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -213,16 +213,17 @@
 
             </LinearLayout>
 
-    RecyclerView: List of my images
+<!--    RecyclerView: List of user images-->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="visible"
                 />
 
-    RecyclerView: List of saved images
+<!--    RecyclerView: List of bookmarked images-->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_saved"
+                android:id="@+id/recycler_view_bookmarked"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"

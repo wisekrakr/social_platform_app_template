@@ -41,7 +41,11 @@ public class ProfileFragment extends Fragment {
     private ImageAdapter imageAdapter;
     private RecyclerView recyclerView;
     private List<PostModel>imageList;
-    private ImageActions imageActions;
+
+    private List<String>userBookmarked;
+    private ImageAdapter imageAdapterBookmark;
+    private RecyclerView recyclerViewBookmark;
+    private List<PostModel>imageListBookmark;
 
     private ImageView userAvatar, options;
     private TextView posts, followers, following, fullName, bio, username;
@@ -50,7 +54,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser user;
     private String profileId;
 
-    private ImageButton myImages, savedImages;
+    private ImageButton userImages, bookmarkedImages;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -76,9 +80,10 @@ public class ProfileFragment extends Fragment {
         bio = view.findViewById(R.id.bio);
         username = view.findViewById(R.id.username);
         editProfile = view.findViewById(R.id.edit_profile);
-        myImages = view.findViewById(R.id.my_images);
-        savedImages = view.findViewById(R.id.saved_images);
+        userImages = view.findViewById(R.id.user_images);
+        bookmarkedImages = view.findViewById(R.id.bookmarked_images);
 
+//        User images recycler view
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new GridLayoutManager(getContext(), 3);
@@ -90,19 +95,33 @@ public class ProfileFragment extends Fragment {
 
         recyclerView.setAdapter(imageAdapter);
 
-        imageActions = new ImageActions(imageAdapter, imageList);
+//        Bookmarked images recycler view
+        recyclerViewBookmark = view.findViewById(R.id.recycler_view_bookmarked);
+        recyclerViewBookmark.setHasFixedSize(true);
+        LinearLayoutManager layoutManagerBookmarked = new GridLayoutManager(getContext(), 3);
+        recyclerViewBookmark.setLayoutManager(layoutManagerBookmarked);
+
+        imageListBookmark = new ArrayList<>();
+        userBookmarked = new ArrayList<>();
+
+        imageAdapterBookmark = new ImageAdapter(getContext(), imageListBookmark);
+
+        recyclerViewBookmark.setAdapter(imageAdapterBookmark);
 
         UserActionsStatic.getProfileData(userAvatar, username, fullName, bio, profileId);
         editProfile();
         getFollowsOrFollowing();
         getNumOfPosts();
-        imageActions.getUserImages();
+        ImageActions.getUserImages(imageAdapter, imageList);
+        ImageActions.getBookmarkedImages(imageAdapterBookmark, userBookmarked, imageListBookmark);
+
+        showUserOrBookmarkedImageCollection();
 
         if(profileId.equals(user.getUid())){
             editProfile.setText(R.string.edit_profile);
         }else{
             buttonSaysFollowOrFollowing();
-            savedImages.setVisibility(View.GONE);
+            bookmarkedImages.setVisibility(View.GONE);
         }
 
         return view;
@@ -214,6 +233,27 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+    }
+
+    private void showUserOrBookmarkedImageCollection(){
+        recyclerView.setVisibility(View.VISIBLE);
+        recyclerViewBookmark.setVisibility(View.GONE);
+
+        userImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.setVisibility(View.VISIBLE);
+                recyclerViewBookmark.setVisibility(View.GONE);
+            }
+        });
+
+        bookmarkedImages.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                recyclerView.setVisibility(View.GONE);
+                recyclerViewBookmark.setVisibility(View.VISIBLE);
             }
         });
     }

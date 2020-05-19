@@ -86,16 +86,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         UserActionsStatic.getPublisherData(holder.avatarImage, holder.username, holder.publisher, postModel.getPublisher());
         //show likes
         isLiked(postModel.getPostId(), holder.like);
+        //show bookmarked
+        isBookmarked(postModel.getPostId(), holder.bookmark);
         //show number likes
         numLikes(postModel.getPostId(), holder.likes);
         //show number comments
         numComments(postModel.getPostId(), holder.comments);
         //like click handler
-        clickedLike(holder, postModel,user);
+        onClickViewHolderItemListener(holder, postModel);
         //comment click post handler
         clickHandler(postModel,holder.comment);
         //comments list handler
         clickHandler(postModel,holder.comments);
+
     }
 
     @Override
@@ -105,7 +108,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
 
     static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        private ImageView avatarImage, postImage, like, comment, save;
+        private ImageView avatarImage, postImage, like, comment, bookmark;
 
         private TextView username,  likes, title, tags, description, comments, publisher, createdAt;
 
@@ -117,7 +120,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
             postImage = itemView.findViewById(R.id.post_image);
             like = itemView.findViewById(R.id.like);
             comment = itemView.findViewById(R.id.comment);
-            save = itemView.findViewById(R.id.save);
+            bookmark = itemView.findViewById(R.id.bookmark);
             username = itemView.findViewById(R.id.username);
             likes = itemView.findViewById(R.id.likes);
             publisher = itemView.findViewById(R.id.publisher);
@@ -130,14 +133,30 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         }
     }
 
-    private void clickedLike(final MyViewHolder holder, final PostModel post, final FirebaseUser user){
+    private void onClickViewHolderItemListener(final MyViewHolder holder, final PostModel post){
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(holder.like.getTag().equals("like")){
-                    FirebaseDatabase.getInstance().getReference().child("Likes").child(post.getPostId()).child(user.getUid()).setValue(true);
+                    FirebaseDatabase.getInstance().getReference().child("Likes").child(post.getPostId())
+                            .child(user.getUid()).setValue(true);
                 }else{
-                    FirebaseDatabase.getInstance().getReference().child("Likes").child(post.getPostId()).child(user.getUid()).removeValue();
+                    FirebaseDatabase.getInstance().getReference().child("Likes").child(post.getPostId())
+                            .child(user.getUid()).removeValue();
+
+                }
+            }
+        });
+
+        holder.bookmark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(holder.bookmark.getTag().equals("bookmark")){
+                    FirebaseDatabase.getInstance().getReference().child("Bookmarked").child(user.getUid())
+                            .child(post.getPostId()).setValue(true);
+                }else{
+                    FirebaseDatabase.getInstance().getReference().child("Bookmarked").child(user.getUid())
+                            .child(post.getPostId()).removeValue();
 
                 }
             }
@@ -213,7 +232,28 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         });
     }
 
+    private void isBookmarked(final String postId, final ImageView imageView){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Bookmarked").child(user.getUid());
 
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child(postId).exists()){
+                    imageView.setImageResource(R.drawable.ic_bookmarked);
+                    imageView.setTag("bookmarked");
+                }else{
+                    imageView.setImageResource(R.drawable.ic_bookmark_border_black);
+                    imageView.setTag("bookmark");
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 
 }
