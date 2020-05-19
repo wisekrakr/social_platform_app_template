@@ -10,7 +10,6 @@ import com.wisekrakr.david.teachwise.adapters.PostAdapter;
 import com.wisekrakr.david.teachwise.models.PostModel;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -56,9 +55,30 @@ public class PostActions implements PostActionsContext {
     }
 
     @Override
-    public void createPost() {
+    public void getPost(final String postId) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts").child(postId);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                postsList.clear();
 
+                PostModel postModel = dataSnapshot.getValue(PostModel.class);
+
+                if (postModel.getPostId().equals(postId)){
+                    postsList.add(postModel);
+                }
+
+                postAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
+
+
 
     @Override
     public void checkFollowing() {

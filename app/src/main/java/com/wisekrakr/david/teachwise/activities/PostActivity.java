@@ -70,7 +70,7 @@ public class PostActivity extends AppCompatActivity {
         closePost();
 
         //handles clicking to add to large text field
-        handleStudyContextInput();
+        handleDescriptionInput();
 
         //handle post click
         handlePost();
@@ -207,7 +207,7 @@ public class PostActivity extends AppCompatActivity {
     }
 
 
-    private void handleStudyContextInput(){
+    private void handleDescriptionInput(){
         description.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

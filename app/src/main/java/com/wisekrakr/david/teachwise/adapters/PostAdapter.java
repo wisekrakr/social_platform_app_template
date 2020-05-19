@@ -2,6 +2,7 @@ package com.wisekrakr.david.teachwise.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.wisekrakr.david.teachwise.R;
 import com.wisekrakr.david.teachwise.actions.UserActionsStatic;
 import com.wisekrakr.david.teachwise.activities.CommentActivity;
+import com.wisekrakr.david.teachwise.fragments.PostFragment;
+import com.wisekrakr.david.teachwise.fragments.ProfileFragment;
 import com.wisekrakr.david.teachwise.models.PostModel;
 import com.wisekrakr.david.teachwise.utils.CreatedAtFormatter;
 import com.wisekrakr.david.teachwise.utils.UserImage;
@@ -25,6 +28,7 @@ import com.wisekrakr.david.teachwise.utils.UserImage;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
@@ -93,11 +97,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         //show number comments
         numComments(postModel.getPostId(), holder.comments);
         //like click handler
-        onClickViewHolderItemListener(holder, postModel);
+        onClickLikeOrBookmark(holder, postModel);
         //comment click post handler
-        clickHandler(postModel,holder.comment);
+        setActivityToCommenting(postModel,holder.comment);
         //comments list handler
-        clickHandler(postModel,holder.comments);
+        setActivityToCommenting(postModel,holder.comments);
+        //go to profile
+        onClickGoToProfile(holder.avatarImage, postModel);
+        onClickGoToProfile(holder.username, postModel);
+        onClickGoToProfile(holder.publisher, postModel);
+        //go to post
+        onClickGoToPost(holder.postImage, postModel);
 
     }
 
@@ -133,7 +143,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         }
     }
 
-    private void onClickViewHolderItemListener(final MyViewHolder holder, final PostModel post){
+    private void onClickLikeOrBookmark(final MyViewHolder holder, final PostModel post){
         holder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +173,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         });
     }
 
-    private void clickHandler(final PostModel post, View view){
+    private void setActivityToCommenting(final PostModel post, View view){
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -255,5 +265,37 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         });
     }
 
+    private void onClickGoToProfile(View view, final PostModel post){
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                editor.putString("profileId", post.getPublisher());
+                editor.apply();
 
+                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new ProfileFragment()).commit();
+
+
+            }
+        });
+
+    }
+
+    private void onClickGoToPost(View view, final PostModel post){
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                editor.putString("postId", post.getPostId());
+                editor.apply();
+
+                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new PostFragment()).commit();
+
+
+            }
+        });
+
+    }
 }

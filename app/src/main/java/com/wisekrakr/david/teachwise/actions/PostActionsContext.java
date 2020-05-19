@@ -2,6 +2,6 @@ package com.wisekrakr.david.teachwise.actions;
 
 public interface PostActionsContext {
     void getPosts();
-    void createPost();
+    void getPost(String postId);
     void checkFollowing();
 }
