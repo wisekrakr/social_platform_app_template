@@ -166,6 +166,15 @@
                 android:layout_height="wrap_content"
                 android:padding="12dp"
                 android:orientation="vertical">
+<!--                Username TextView-->
+                <TextView
+                    android:id="@+id/at_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/colorPrimaryDark"/>
 <!--            Full name TextView-->
                 <TextView
                     android:id="@+id/full_name"
@@ -182,6 +191,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:maxLines="5"
+                    android:textColor="@color/colorPrimaryDark"/>
+<!--            Location TextView-->
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="1"
                     android:textColor="@color/colorPrimaryDark"/>
             </LinearLayout>
 

@@ -1,6 +1,7 @@
 package com.wisekrakr.david.teachwise.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.wisekrakr.david.teachwise.R;
 import com.wisekrakr.david.teachwise.actions.ImageActions;
 import com.wisekrakr.david.teachwise.actions.UserActionsStatic;
+import com.wisekrakr.david.teachwise.activities.ProfileEditActivity;
 import com.wisekrakr.david.teachwise.adapters.ImageAdapter;
 import com.wisekrakr.david.teachwise.models.PostModel;
 
@@ -48,7 +50,7 @@ public class ProfileFragment extends Fragment {
     private List<PostModel>imageListBookmark;
 
     private ImageView userAvatar, options;
-    private TextView posts, followers, following, fullName, bio, username;
+    private TextView posts, followers, following, fullName, bio, location, username, atUsername;
     private Button editProfile;
 
     private FirebaseUser user;
@@ -78,6 +80,8 @@ public class ProfileFragment extends Fragment {
         following = view.findViewById(R.id.following);
         fullName = view.findViewById(R.id.full_name);
         bio = view.findViewById(R.id.bio);
+        location = view.findViewById(R.id.location);
+        atUsername = view.findViewById(R.id.at_username);
         username = view.findViewById(R.id.username);
         editProfile = view.findViewById(R.id.edit_profile);
         userImages = view.findViewById(R.id.user_images);
@@ -108,7 +112,7 @@ public class ProfileFragment extends Fragment {
 
         recyclerViewBookmark.setAdapter(imageAdapterBookmark);
 
-        UserActionsStatic.getProfileData(userAvatar, username, fullName, bio, profileId);
+        UserActionsStatic.getProfileData(userAvatar, username, fullName, bio,location, atUsername, profileId);
         editProfile();
         getFollowsOrFollowing();
         getNumOfPosts();
@@ -136,8 +140,8 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v) {
                 String btn = editProfile.getText().toString();
 
-                if(btn.equals(R.string.edit_profile)){
-                    //to edit profile
+                if(btn.equals("Edit Profile")){
+                    startActivity(new Intent(getContext(), ProfileEditActivity.class));
                 }else if(btn.equals("follow")){
                     FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getUid())
                             .child("following").child(profileId).setValue(true);

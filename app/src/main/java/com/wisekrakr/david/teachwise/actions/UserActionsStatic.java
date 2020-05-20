@@ -12,11 +12,24 @@ import com.wisekrakr.david.teachwise.R;
 import com.wisekrakr.david.teachwise.models.UserModel;
 import com.wisekrakr.david.teachwise.utils.UserImage;
 
+import java.util.HashMap;
+
 import androidx.annotation.NonNull;
 
 
 public class UserActionsStatic {
 
+    public static void updateUserData(String userId, String fullName, String username, String bio, String location){
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("fullName", fullName);
+        hashMap.put("username", username);
+        hashMap.put("bio", bio);
+        hashMap.put("location", location);
+
+        reference.updateChildren(hashMap);
+    }
 
     public static void getUserData(final ImageView avatarImage, final TextView username, String userId){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
@@ -59,7 +72,7 @@ public class UserActionsStatic {
         });
     }
 
-    public static void getProfileData(final ImageView avatarImage, final TextView username,final TextView fullName,final TextView bio, String profileId){
+    public static void getProfileData(final ImageView avatarImage, final TextView username,final TextView fullName,final TextView bio,final TextView location,final TextView atUsername, String profileId){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(profileId);
 
         reference.addValueEventListener(new ValueEventListener() {
@@ -71,6 +84,9 @@ public class UserActionsStatic {
                 username.setText(userModel.getUsername());
                 fullName.setText(userModel.getFullName());
                 bio.setText(userModel.getBio());
+                location.setText(userModel.getLocation());
+                atUsername.setText("@"+userModel.getUsername());
+
 
             }
 

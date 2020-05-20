@@ -1,13 +1,11 @@
 package com.wisekrakr.david.teachwise.activities;
 
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +24,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.wisekrakr.david.teachwise.R;
+import com.wisekrakr.david.teachwise.utils.Extensions;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -133,13 +132,6 @@ public class PostActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private String getFileExtension(Uri uri){
-        ContentResolver contentResolver = getContentResolver();
-
-        MimeTypeMap mime = MimeTypeMap.getSingleton();
-
-        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
-    }
 
     /**
      * handles uploading a file (text or image)
@@ -148,7 +140,7 @@ public class PostActivity extends AppCompatActivity {
 
         if(fileUri != null){
             final StorageReference fileReference = storageReference
-                    .child(System.currentTimeMillis() + "." + getFileExtension(fileUri));
+                    .child(System.currentTimeMillis() + "." + Extensions.getFileExtension(fileUri, PostActivity.this));
 
             StorageTask uploadTask = fileReference.putFile(fileUri);
             uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -202,7 +194,6 @@ public class PostActivity extends AppCompatActivity {
             Toast.makeText(PostActivity.this,"No Image Selected", Toast.LENGTH_SHORT).show();
 
         }
-
 
     }
 
