@@ -11,6 +11,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.wisekrakr.david.teachwise.adapters.UserAdapter;
 import com.wisekrakr.david.teachwise.models.UserModel;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -49,6 +51,10 @@ public class UserActions implements UserActionsContext {
                     if(!userModel.getId().equals(user.getUid())){
                         usersList.add(userModel);
                     }
+
+                    //TODO: possible bug (minSDK set to 24 instead of 21. Language to 8 instead of 6)
+                    Collections.sort(usersList, Comparator.comparing(UserModel::getUsername));
+
                     //refresh adapter
                     userAdapter.notifyDataSetChanged();
                 }

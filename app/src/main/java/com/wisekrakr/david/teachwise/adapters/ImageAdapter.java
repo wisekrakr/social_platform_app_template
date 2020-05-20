@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.wisekrakr.david.teachwise.R;
 import com.wisekrakr.david.teachwise.fragments.PostFragment;
 import com.wisekrakr.david.teachwise.models.PostModel;
-import com.wisekrakr.david.teachwise.utils.UserImage;
+import com.wisekrakr.david.teachwise.utils.ImageHandler;
 
 import java.util.List;
 
@@ -45,7 +45,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.MyViewHolder
         //go to post
         onClickGoToPost(holder.image, postModel);
 
-        UserImage.setPicassoImage(postModel.getPostImage(), holder.image, R.drawable.ic_image);
+        ImageHandler.setPicassoImage(postModel.getPostImage(), holder.image, R.drawable.ic_image);
 
     }
 

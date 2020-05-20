@@ -20,7 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wisekrakr.david.teachwise.R;
-import com.wisekrakr.david.teachwise.actions.ImageActions;
+import com.wisekrakr.david.teachwise.actions.ImageActionsStatic;
+import com.wisekrakr.david.teachwise.actions.NotificationActionsStatic;
 import com.wisekrakr.david.teachwise.actions.UserActionsStatic;
 import com.wisekrakr.david.teachwise.activities.ProfileEditActivity;
 import com.wisekrakr.david.teachwise.adapters.ImageAdapter;
@@ -28,6 +29,7 @@ import com.wisekrakr.david.teachwise.models.PostModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -70,7 +72,7 @@ public class ProfileFragment extends Fragment {
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
-        SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
+        SharedPreferences prefs = Objects.requireNonNull(getContext()).getSharedPreferences("PREFS", Context.MODE_PRIVATE);
         profileId = prefs.getString("profileId", "none");
 
         userAvatar = view.findViewById(R.id.user_avatar);
@@ -116,8 +118,8 @@ public class ProfileFragment extends Fragment {
         editProfile();
         getFollowsOrFollowing();
         getNumOfPosts();
-        ImageActions.getUserImages(imageAdapter, imageList);
-        ImageActions.getBookmarkedImages(imageAdapterBookmark, userBookmarked, imageListBookmark);
+        ImageActionsStatic.getUserImages(imageAdapter, imageList);
+        ImageActionsStatic.getBookmarkedImages(imageAdapterBookmark, userBookmarked, imageListBookmark);
 
         showUserOrBookmarkedImageCollection();
 
@@ -147,6 +149,8 @@ public class ProfileFragment extends Fragment {
                             .child("following").child(profileId).setValue(true);
                     FirebaseDatabase.getInstance().getReference().child("Follow").child(profileId)
                             .child("followers").child(user.getUid()).setValue(true);
+
+                    NotificationActionsStatic.addNotificationOnUser(profileId);
                 }else if(btn.equals("following")){
                     FirebaseDatabase.getInstance().getReference().child("Follow").child(user.getUid())
                             .child("following").child(profileId).removeValue();

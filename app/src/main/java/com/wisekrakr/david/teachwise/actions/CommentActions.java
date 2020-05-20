@@ -33,7 +33,7 @@ public class CommentActions implements CommentActionsContext {
 
 
     @Override
-    public void addComment(EditText comment, String postId) {
+    public void addComment(EditText comment, String postId, String publisherId) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Comments").child(postId);
 
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -42,6 +42,9 @@ public class CommentActions implements CommentActionsContext {
         hashMap.put("createdAt", new Date().getTime());
 
         reference.push().setValue(hashMap);
+
+        NotificationActionsStatic.addNotificationOnComment(publisherId, comment.getText().toString(), postId);
+
         comment.setText("");
     }
 

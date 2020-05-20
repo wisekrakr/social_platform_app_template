@@ -92,7 +92,7 @@ public class CommentActivity extends AppCompatActivity {
                 if(addCommentText.getText().toString().equals("")){
                     Toast.makeText(CommentActivity.this, "Please say something before posting", Toast.LENGTH_SHORT).show();
                 }else{
-                    commentActions.addComment(addCommentText, postId);
+                    commentActions.addComment(addCommentText, postId, publisherId);
                 }
             }
         });

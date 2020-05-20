@@ -5,7 +5,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 
-public class UserImage {
+public class ImageHandler {
 
     public static void setPicassoImage(String imageFile, ImageView image, int resourceId){
         try {

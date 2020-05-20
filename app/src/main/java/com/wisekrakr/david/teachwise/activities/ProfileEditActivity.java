@@ -31,7 +31,7 @@ import com.wisekrakr.david.teachwise.R;
 import com.wisekrakr.david.teachwise.actions.UserActionsStatic;
 import com.wisekrakr.david.teachwise.models.UserModel;
 import com.wisekrakr.david.teachwise.utils.Extensions;
-import com.wisekrakr.david.teachwise.utils.UserImage;
+import com.wisekrakr.david.teachwise.utils.ImageHandler;
 
 import java.util.HashMap;
 
@@ -94,7 +94,7 @@ public class ProfileEditActivity extends AppCompatActivity {
                 username.setText(userModel.getUsername());
                 bio.setText(userModel.getBio());
                 location.setText(userModel.getLocation());
-                UserImage.setPicassoImage(userModel.getAvatar(), userAvatar, R.drawable.ic_person_black);
+                ImageHandler.setPicassoImage(userModel.getAvatar(), userAvatar, R.drawable.ic_person_black);
             }
 
             @Override

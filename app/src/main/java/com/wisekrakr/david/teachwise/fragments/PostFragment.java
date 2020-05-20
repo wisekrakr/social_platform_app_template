@@ -22,13 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class PostFragment extends Fragment {
 
-    private String postId;
-    private RecyclerView recyclerView;
-    private PostAdapter postAdapter;
-    private List<PostModel> postList;
-
-    private PostActions postActions;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,20 +30,20 @@ public class PostFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post, container, false);
 
         SharedPreferences prefs = getContext().getSharedPreferences("PREFS", Context.MODE_PRIVATE);
-        postId = prefs.getString("postId", "none");
+        String postId = prefs.getString("postId", "none");
 
-        recyclerView = view.findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        postList = new ArrayList<>();
+        List<PostModel> postList = new ArrayList<>();
 
-        postAdapter = new PostAdapter(getContext(), postList);
+        PostAdapter postAdapter = new PostAdapter(getContext(), postList);
 
         recyclerView.setAdapter(postAdapter);
 
-        postActions = new PostActions(postAdapter, postList);
+        PostActions postActions = new PostActions(postAdapter, postList);
 
         postActions.getPost(postId);
 

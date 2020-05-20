@@ -17,9 +17,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wisekrakr.david.teachwise.R;
+import com.wisekrakr.david.teachwise.actions.NotificationActionsStatic;
 import com.wisekrakr.david.teachwise.fragments.ProfileFragment;
 import com.wisekrakr.david.teachwise.models.UserModel;
-import com.wisekrakr.david.teachwise.utils.UserImage;
+import com.wisekrakr.david.teachwise.utils.ImageHandler;
 
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
         //set data
         holder.nameText.setText(userUsername);
         holder.fullNameText.setText(userFullName);
-        UserImage.setPicassoImageWithPlaceHolder(userAvatar, holder.avatarImage, R.drawable.ic_person_black);
+        ImageHandler.setPicassoImageWithPlaceHolder(userAvatar, holder.avatarImage, R.drawable.ic_person_black);
 
         //check if user is following
         isFollowing(userModel.getId(), holder.followBtn);
@@ -122,6 +123,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
                if(holder.followBtn.getText().toString().equals("follow")){
                    databaseReference.child(user.getUid()).child("following").child(userModel.getId()).setValue(true);
                    databaseReference.child(userModel.getId()).child("followers").child(user.getUid()).setValue(true);
+
+                   NotificationActionsStatic.addNotificationOnUser(userModel.getId());
                }else{
                    databaseReference.child(user.getUid()).child("following").child(userModel.getId()).removeValue();
                    databaseReference.child(userModel.getId()).child("followers").child(user.getUid()).removeValue();

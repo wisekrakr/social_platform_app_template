@@ -17,13 +17,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wisekrakr.david.teachwise.R;
+import com.wisekrakr.david.teachwise.actions.NotificationActionsStatic;
 import com.wisekrakr.david.teachwise.actions.UserActionsStatic;
 import com.wisekrakr.david.teachwise.activities.CommentActivity;
-import com.wisekrakr.david.teachwise.fragments.PostFragment;
 import com.wisekrakr.david.teachwise.fragments.ProfileFragment;
 import com.wisekrakr.david.teachwise.models.PostModel;
 import com.wisekrakr.david.teachwise.utils.CreatedAtFormatter;
-import com.wisekrakr.david.teachwise.utils.UserImage;
+import com.wisekrakr.david.teachwise.utils.ImageHandler;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         final PostModel postModel = postList.get(position);
 
         //if image was uploaded
-        UserImage.setPicassoImageWithPlaceHolder(postModel.getPostImage(), holder.postImage, R.drawable.ic_image);
+        ImageHandler.setPicassoImageWithPlaceHolder(postModel.getPostImage(), holder.postImage, R.drawable.ic_image);
 
 
         //set data
@@ -103,11 +103,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         //comments list handler
         setActivityToCommenting(postModel,holder.comments);
         //go to profile
-        onClickGoToProfile(holder.avatarImage, postModel);
-        onClickGoToProfile(holder.username, postModel);
-        onClickGoToProfile(holder.publisher, postModel);
+        onClickGoTo(holder.publisher, "profileId", postModel.getPublisher());
+        onClickGoTo(holder.username, "profileId", postModel.getPublisher());
+        onClickGoTo(holder.avatarImage, "profileId", postModel.getPublisher());
         //go to post
-        onClickGoToPost(holder.postImage, postModel);
+        onClickGoTo(holder.postImage, "postId", postModel.getPostId());
+
 
     }
 
@@ -150,6 +151,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
                 if(holder.like.getTag().equals("like")){
                     FirebaseDatabase.getInstance().getReference().child("Likes").child(post.getPostId())
                             .child(user.getUid()).setValue(true);
+
+                    NotificationActionsStatic.addNotificationOnPost(post.getPublisher(), post.getPostId());
                 }else{
                     FirebaseDatabase.getInstance().getReference().child("Likes").child(post.getPostId())
                             .child(user.getUid()).removeValue();
@@ -265,37 +268,17 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         });
     }
 
-    private void onClickGoToProfile(View view, final PostModel post){
+    private void onClickGoTo(View view, String id, String objectId){
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                editor.putString("profileId", post.getPublisher());
+                editor.putString(id, objectId);
                 editor.apply();
 
                 ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
                         .replace(R.id.fragment_container, new ProfileFragment()).commit();
-
-
             }
         });
-
-    }
-
-    private void onClickGoToPost(View view, final PostModel post){
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                editor.putString("postId", post.getPostId());
-                editor.apply();
-
-                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new PostFragment()).commit();
-
-
-            }
-        });
-
     }
 }

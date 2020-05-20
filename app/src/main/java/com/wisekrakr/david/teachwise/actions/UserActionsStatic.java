@@ -10,7 +10,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.wisekrakr.david.teachwise.R;
 import com.wisekrakr.david.teachwise.models.UserModel;
-import com.wisekrakr.david.teachwise.utils.UserImage;
+import com.wisekrakr.david.teachwise.utils.ImageHandler;
 
 import java.util.HashMap;
 
@@ -39,7 +39,7 @@ public class UserActionsStatic {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserModel userModel = dataSnapshot.getValue(UserModel.class);
 
-                UserImage.setPicassoImageWithPlaceHolder(userModel.getAvatar(), avatarImage, R.drawable.ic_person_black);
+                ImageHandler.setPicassoImageWithPlaceHolder(userModel.getAvatar(), avatarImage, R.drawable.ic_person_black);
                 username.setText(userModel.getUsername());
 
             }
@@ -59,7 +59,7 @@ public class UserActionsStatic {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserModel userModel = dataSnapshot.getValue(UserModel.class);
 
-                UserImage.setPicassoImageWithPlaceHolder(userModel.getAvatar(), avatarImage, R.drawable.ic_person_black);
+                ImageHandler.setPicassoImageWithPlaceHolder(userModel.getAvatar(), avatarImage, R.drawable.ic_person_black);
                 username.setText(userModel.getUsername());
                 publisher.setText(userModel.getUsername());
 
@@ -80,12 +80,17 @@ public class UserActionsStatic {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserModel userModel = dataSnapshot.getValue(UserModel.class);
 
-                UserImage.setPicassoImageWithPlaceHolder(userModel.getAvatar(), avatarImage, R.drawable.ic_person_black);
-                username.setText(userModel.getUsername());
-                fullName.setText(userModel.getFullName());
-                bio.setText(userModel.getBio());
-                location.setText(userModel.getLocation());
-                atUsername.setText("@"+userModel.getUsername());
+                try {
+                    ImageHandler.setPicassoImageWithPlaceHolder(userModel.getAvatar(), avatarImage, R.drawable.ic_person_black);
+                    username.setText(userModel.getUsername());
+                    fullName.setText(userModel.getFullName());
+                    bio.setText(userModel.getBio());
+                    location.setText(userModel.getLocation());
+                    atUsername.setText("@"+userModel.getUsername());
+                }catch (Exception e){
+                    System.out.println("Something went wrong: " + e.getMessage());
+                }
+
 
 
             }
@@ -105,7 +110,7 @@ public class UserActionsStatic {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 UserModel userModel = dataSnapshot.getValue(UserModel.class);
 
-                UserImage.setPicassoImage(userModel.getAvatar(), image, R.drawable.ic_person_black);
+                ImageHandler.setPicassoImage(userModel.getAvatar(), image, R.drawable.ic_person_black);
             }
 
             @Override

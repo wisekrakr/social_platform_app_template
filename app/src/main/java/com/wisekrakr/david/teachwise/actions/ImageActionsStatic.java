@@ -14,7 +14,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 
-public class ImageActions  {
+public class ImageActionsStatic {
 
 
     public static void getUserImages(final ImageAdapter imageAdapter, final List<PostModel> list) {
