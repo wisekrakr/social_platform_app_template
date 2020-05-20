@@ -17,14 +17,19 @@ public class PostActionsStatic {
 
     public static void getPostImage(final ImageView image, String postId){
 
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Posts").child(postId);
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Posts").child(postId);
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 PostModel postModel = dataSnapshot.getValue(PostModel.class);
 
-                ImageHandler.setPicassoImage(postModel.getPostImage(), image, R.drawable.ic_image);
+                try{
+                    ImageHandler.setPicassoImage(postModel.getPostImage(), image, R.drawable.ic_image);
+                }catch (Exception e){
+                    System.out.println("Something went wrong: " + e.getMessage());
+                }
+
             }
 
             @Override

@@ -25,6 +25,7 @@ public class NotificationActionsStatic {
 
         HashMap<String, Object>hashMap = new HashMap<>();
         hashMap.put("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        hashMap.put("postId", "");
         hashMap.put("comment", "started following you");
         hashMap.put("isPost", false);
 
