@@ -1,6 +1,7 @@
 package com.wisekrakr.david.teachwise.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.wisekrakr.david.teachwise.MainActivity;
 import com.wisekrakr.david.teachwise.R;
 import com.wisekrakr.david.teachwise.actions.NotificationActionsStatic;
 import com.wisekrakr.david.teachwise.fragments.ProfileFragment;
@@ -36,9 +38,12 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
 
     private FirebaseUser user;
 
-    public UserAdapter(Context context, List<UserModel> userList) {
+    private boolean isFragment;
+
+    public UserAdapter(Context context, List<UserModel> userList, boolean isFragment) {
         this.context = context;
         this.userList = userList;
+        this.isFragment = isFragment;
 
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
@@ -47,7 +52,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item, parent, false);
-
 
         return new MyViewHolder(view);
     }
@@ -95,13 +99,21 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder>{
             @Override
             public void onClick(View v) {
 
-                SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
-                editor.putString("profileId", userModel.getId());
-                editor.apply();
+                if (isFragment){
+                    SharedPreferences.Editor editor = context.getSharedPreferences("PREFS", Context.MODE_PRIVATE).edit();
+                    editor.putString("profileId", userModel.getId());
+                    editor.apply();
 
-                ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+                    ((FragmentActivity)context).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
 
-                Toast.makeText(context, " "+ userModel.getUsername(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, " "+ userModel.getUsername(), Toast.LENGTH_SHORT).show();
+                }else{
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.putExtra("publisherId", userModel.getId());
+
+                    context.startActivity(intent);
+                }
+
             }
         });
     }

@@ -11,6 +11,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.wisekrakr.david.teachwise.adapters.UserAdapter;
 import com.wisekrakr.david.teachwise.models.UserModel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -19,6 +20,7 @@ import androidx.annotation.NonNull;
 
 public class UserActions implements UserActionsContext {
     public static final String TAG = "ProfileActions";
+    private final ArrayList<String> idList;
 
     private UserAdapter userAdapter;
     private List<UserModel> usersList;
@@ -32,9 +34,38 @@ public class UserActions implements UserActionsContext {
 
         reference = FirebaseDatabase.getInstance().getReference("Users");
         user = FirebaseAuth.getInstance().getCurrentUser();
+
+        idList = new ArrayList<>();
     }
 
+    @Override
+    public void showUsers() {
 
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                usersList.clear();
+
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    UserModel userModel = snapshot.getValue(UserModel.class);
+
+                    for(String id: idList){
+                        if(userModel.getId().equals(id)){
+                            usersList.add(userModel);
+                        }
+
+                    }
+                }
+
+                userAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     @Override
     public void getAllUsers() {
@@ -102,6 +133,74 @@ public class UserActions implements UserActionsContext {
         });
     }
 
+    @Override
+    public void getFollowers(String id) {
 
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Follow")
+                .child(id).child("followers");
 
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                idList.clear();
+
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    idList.add(snapshot.getKey());
+                }
+                showUsers();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    @Override
+    public void getFollowing(String id) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Follow")
+                .child(id).child("following");
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                idList.clear();
+
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    idList.add(snapshot.getKey());
+                }
+                showUsers();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @Override
+    public void getLikes(String id) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Likes")
+                .child(id);
+
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                idList.clear();
+
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    idList.add(snapshot.getKey());
+                }
+                showUsers();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

@@ -58,7 +58,7 @@ public class SearchFragment extends Fragment {
         usersList = new ArrayList<>();
 
         //init user adapter
-        userAdapter = new UserAdapter(getContext(), usersList);
+        userAdapter = new UserAdapter(getContext(), usersList, true);
 
         //set adapter to view
         recyclerView.setAdapter(userAdapter);

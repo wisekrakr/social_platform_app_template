@@ -20,6 +20,7 @@ import com.wisekrakr.david.teachwise.R;
 import com.wisekrakr.david.teachwise.actions.NotificationActionsStatic;
 import com.wisekrakr.david.teachwise.actions.UserActionsStatic;
 import com.wisekrakr.david.teachwise.activities.CommentActivity;
+import com.wisekrakr.david.teachwise.activities.FollowersActivity;
 import com.wisekrakr.david.teachwise.fragments.ProfileFragment;
 import com.wisekrakr.david.teachwise.models.PostModel;
 import com.wisekrakr.david.teachwise.utils.CreatedAtFormatter;
@@ -102,6 +103,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
         setActivityToCommenting(postModel,holder.comment);
         //comments list handler
         setActivityToCommenting(postModel,holder.comments);
+        //likes list handler
+        setActivityToFollowers(postModel,holder.likes);
         //go to profile
         onClickGoTo(holder.publisher, "profileId", postModel.getPublisher());
         onClickGoTo(holder.username, "profileId", postModel.getPublisher());
@@ -183,6 +186,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.MyViewHolder>{
                 Intent intent = new Intent(context, CommentActivity.class);
                 intent.putExtra("postId", post.getPostId());
                 intent.putExtra("publisherId", post.getPublisher());
+                context.startActivity(intent);
+
+            }
+        });
+    }
+
+    private void setActivityToFollowers(final PostModel post, View view){
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, FollowersActivity.class);
+                intent.putExtra("id", post.getPostId());
+                intent.putExtra("title", "likes");
                 context.startActivity(intent);
 
             }

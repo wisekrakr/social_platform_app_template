@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 
 public class UserActionsStatic {
 
+
     public static void updateUserData(String userId, String fullName, String username, String bio, String location){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users").child(userId);
 
@@ -90,9 +91,6 @@ public class UserActionsStatic {
                 }catch (Exception e){
                     System.out.println("Something went wrong: " + e.getMessage());
                 }
-
-
-
             }
 
             @Override
@@ -119,4 +117,7 @@ public class UserActionsStatic {
             }
         });
     }
+
+
+
 }
