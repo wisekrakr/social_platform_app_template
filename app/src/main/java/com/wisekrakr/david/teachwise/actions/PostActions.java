@@ -20,11 +20,16 @@ public class PostActions implements PostActionsContext {
     private List<PostModel> postsList;
     private List<String> followingList;
 
+
     public PostActions(PostAdapter postAdapter, List<PostModel> postsList) {
         this.postAdapter = postAdapter;
         this.postsList = postsList;
 
         followingList = new ArrayList<>();
+    }
+
+    public List<PostModel> getPostsList() {
+        return postsList;
     }
 
     @Override
@@ -45,6 +50,7 @@ public class PostActions implements PostActionsContext {
                 }
 
                 postAdapter.notifyDataSetChanged();
+
             }
 
             @Override
@@ -97,6 +103,7 @@ public class PostActions implements PostActionsContext {
                 }
 
                 getPosts();
+
             }
 
             @Override

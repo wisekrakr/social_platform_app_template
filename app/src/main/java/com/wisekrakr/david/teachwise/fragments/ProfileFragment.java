@@ -24,6 +24,7 @@ import com.wisekrakr.david.teachwise.actions.ImageActionsStatic;
 import com.wisekrakr.david.teachwise.actions.NotificationActionsStatic;
 import com.wisekrakr.david.teachwise.actions.UserActionsStatic;
 import com.wisekrakr.david.teachwise.activities.FollowersActivity;
+import com.wisekrakr.david.teachwise.activities.OptionsActivity;
 import com.wisekrakr.david.teachwise.activities.ProfileEditActivity;
 import com.wisekrakr.david.teachwise.adapters.ImageAdapter;
 import com.wisekrakr.david.teachwise.models.PostModel;
@@ -123,6 +124,7 @@ public class ProfileFragment extends Fragment {
         showUserOrBookmarkedImageCollection();
         showFollowList(followers,"followers");
         showFollowList(following,"following");
+        showOptions();
 
         if(profileId.equals(user.getUid())){
             editProfile.setText(R.string.edit_profile);
@@ -275,6 +277,15 @@ public class ProfileFragment extends Fragment {
                 intent.putExtra("id", profileId);
                 intent.putExtra("title", listName);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void showOptions(){
+        options.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), OptionsActivity.class));
             }
         });
     }

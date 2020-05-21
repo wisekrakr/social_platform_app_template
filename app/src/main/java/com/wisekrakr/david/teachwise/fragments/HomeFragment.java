@@ -1,26 +1,19 @@
 package com.wisekrakr.david.teachwise.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.wisekrakr.david.teachwise.R;
 import com.wisekrakr.david.teachwise.actions.PostActions;
-import com.wisekrakr.david.teachwise.activities.LoginActivity;
 import com.wisekrakr.david.teachwise.adapters.PostAdapter;
 import com.wisekrakr.david.teachwise.models.PostModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +31,8 @@ public class HomeFragment extends Fragment {
 
     //post actions
     private PostActions postActions;
+
+    private ProgressBar progressBar;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -74,45 +69,54 @@ public class HomeFragment extends Fragment {
         //set adapter to view
         recyclerView.setAdapter(postAdapter);
 
+        //init progressbar
+        progressBar = view.findViewById(R.id.progressbar_circular);
+
+        if(postActions.getPostsList().isEmpty()){
+            progressBar.setVisibility(View.GONE);
+        }
+
         return view;
     }
 
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        setHasOptionsMenu(true); //show menu option in fragment
-        super.onCreate(savedInstanceState);
-    }
 
-    /**
-     * Inflate option menu
-     */
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-        //inflating menu
-        inflater.inflate(R.menu.top_nav,menu);
 
-        super.onCreateOptionsMenu(menu, inflater);
-
-    }
-
-    /**
-     * Handle menu item clicks
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        //get item id
-        int id = item.getItemId();
-        System.out.println("logout");
-        if(id == R.id.action_logout){
-
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(getContext(), LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        setHasOptionsMenu(true); //show menu option in fragment
+//        super.onCreate(savedInstanceState);
+//    }
+//
+//    /**
+//     * Inflate option menu
+//     */
+//    @Override
+//    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+//        //inflating menu
+//        inflater.inflate(R.menu.top_nav,menu);
+//
+//        super.onCreateOptionsMenu(menu, inflater);
+//
+//    }
+//
+//    /**
+//     * Handle menu item clicks
+//     */
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        //get item id
+//        int id = item.getItemId();
+//        System.out.println("logout");
+//        if(id == R.id.action_logout){
+//
+//            FirebaseAuth.getInstance().signOut();
+//            Intent intent = new Intent(getContext(), LoginActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            startActivity(intent);
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 
 }
